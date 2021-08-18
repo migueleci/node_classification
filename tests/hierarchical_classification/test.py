@@ -41,9 +41,8 @@ def readListFile(filename):
 start_time = time()
 dt = datetime.datetime.today()
 
-PATH = "/home/miguel/projects/omics/XGBhc/test"
-DATA_PATH = "{0}/{1}".format(PATH, "data")
-OUTPUT_PATH = "{0}/{1}".format(PATH, "output")
+DATA_PATH = "data"
+OUTPUT_PATH = "output"
 
 root = "GO:0002376"
 

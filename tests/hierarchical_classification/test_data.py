@@ -12,9 +12,9 @@ import pandas as pd
 # nodeclass library
 from nodeclass.tools import data
 
-PATH = "/home/miguel/projects/omics/XGBhc/test"
-DATA_PATH = "{0}/{1}".format(PATH, "raw_data")
-OUTPUT_PATH = "{0}/{1}".format(PATH, "data")
+
+DATA_PATH = "raw_data"
+OUTPUT_PATH = "data"
 
 data_ppi = pd.read_csv('{0}/data_ppi.csv'.format(DATA_PATH), dtype='object', header=0, names=['Source','Target'])
 data_isa = pd.read_csv('{0}/data_isa.csv'.format(DATA_PATH), dtype='object', header=0, names=['Class','Ancestor'])
