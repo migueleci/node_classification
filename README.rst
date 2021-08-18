@@ -42,7 +42,7 @@ will be automatically installed::
   python3 -m pip install nodeclass
 
 The source code and examples can be found in this
-`GitHub repository <https://github.com/migueleci/nodeclass>`_.
+`GitHub repository <https://github.com/migueleci/node_classification>`_.
 
 Example
 -------
@@ -60,7 +60,7 @@ How to run the example?
 """""""""""""""""""""""
 
 The complete source code of the example can be found in the
-`GitHub repository <https://github.com/migueleci/nodeclass>`_. First, the
+`GitHub repository <https://github.com/migueleci/node_classification>`_. First, the
 *xgbfnc* package need to be imported::
 
   from nodeclass.models import xgbfn
@@ -105,7 +105,7 @@ How to run the example?
 """""""""""""""""""""""
 
 The complete source code of the example can be found in the
-`GitHub repository <https://github.com/migueleci/nodeclass>`_. First, the
+`GitHub repository <https://github.com/migueleci/node_classification>`_. First, the
 *xgbhc* package need to be imported::
 
   from nodeclass.models import xgbhc
@@ -156,5 +156,4 @@ To run the example execute the following commands::
 Documentation
 =============
 
-..
-  Documentation of the package can be found `here <https://xgbhc.readthedocs.io/en/latest/>`_.
+Documentation of the package can be found `here <https://nodeclass.readthedocs.io/en/latest/>`_.

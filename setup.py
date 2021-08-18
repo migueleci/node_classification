@@ -11,13 +11,13 @@ with open('LICENSE', encoding='utf-8') as f:
 
 setup(
     name='nodeclass',
-    version='0.1.0',
+    version='0.0.1',
     description='Node classification package',
     long_description=readme,
     long_description_content_type='text/x-rst',
     author='Miguel Romero',
     author_email='romeromiguelin@gmail.com',
-    url='https://github.com/migueleci/--pending--',
+    url='https://github.com/migueleci/node_classification',
     license='MIT',
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[

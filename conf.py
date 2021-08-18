@@ -17,7 +17,7 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Node classification'
+project = 'nodeclass'
 copyright = '2021, Miguel Romero'
 author = 'Miguel Romero'
 
