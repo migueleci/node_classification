@@ -9,8 +9,9 @@ import pandas as pd
 from time import time
 from tqdm import tqdm
 
-from xgbfnc import XGBfnc
-from xgbfnc import data
+# nodeclass library
+from nodeclass.models.xgbfnc import XGBfnc
+from nodeclass.tools import data
 
 ##########################
 # 1. Import and clean data

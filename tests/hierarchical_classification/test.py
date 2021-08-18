@@ -13,9 +13,8 @@ import pandas as pd
 from tqdm import tqdm
 from time import time
 
-# XGBhc library
-from context import xgbhc
-from xgbhc import XGBhc
+# nodeclass library
+from nodeclass.models.xgbhc import XGBhc
 
 
 def readListFile(filename):

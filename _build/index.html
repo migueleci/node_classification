@@ -1,0 +1,1119 @@
+
+
+<!doctype html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Welcome to Node Classification &#8212; nodeclass alpha documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/bizstyle.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/bizstyle.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <!--[if lt IE 9]>
+    <script src="_static/css3-mediaqueries.js"></script>
+    <![endif]-->
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">nodeclass alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to Node Classification</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="toctree-wrapper compound">
+</div>
+<section id="welcome-to-node-classification">
+<h1>Welcome to Node Classification<a class="headerlink" href="#welcome-to-node-classification" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p>Written by Miguel Romero</p></li>
+<li><p>Last update: 18/08/21</p></li>
+</ul>
+<section id="node-classification">
+<h2>Node classification<a class="headerlink" href="#node-classification" title="Permalink to this headline">¶</a></h2>
+<p>This package aims to provide different approaches to the <em>node classification</em>
+problem (also known as <em>attribute prediction</em>) using machine learning
+techniques. There are two approaches available: flat node classification (fnc)
+and hierarchical classification (hc). Both approaches are based on a gradient
+boosting decision tree algorithm called <a class="reference external" href="https://xgboost.readthedocs.io/en/latest/">XGBoost</a>, in addition the approaches are
+equipped with an over-sampling technique call <a class="reference external" href="https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html">SMOTE</a>.</p>
+<section id="flat-classification">
+<h3>Flat classification<a class="headerlink" href="#flat-classification" title="Permalink to this headline">¶</a></h3>
+<p>Flat node classification aims to valuate whether the structural (topological)
+properties of a network are useful for predicting node attributes of
+nodes (i.e., node classification), without considering the (possible)
+relationships between the classes of the node attribute to be predicted, i.e.,
+the classes are predicted independently.</p>
+</section>
+<section id="hierarchical-classification">
+<h3>Hierarchical classification<a class="headerlink" href="#hierarchical-classification" title="Permalink to this headline">¶</a></h3>
+<p>Hierarchical node classification considers the hierarchical organization of
+the classes of a node attribute to be predicted. Using a top-down approach a
+binary classifier is trained per class according to the hierarchy, which is
+represented as a DAG.</p>
+</section>
+</section>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
+<p>The node classification package can be install using pip, the requirements
+will be automatically installed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">python3</span> <span class="o">-</span><span class="n">m</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">nodeclass</span>
+</pre></div>
+</div>
+<p>The source code and examples can be found in this
+<a class="reference external" href="https://github.com/migueleci/node_classification">GitHub repository</a>.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<section id="id1">
+<h3>Flat classification<a class="headerlink" href="#id1" title="Permalink to this headline">¶</a></h3>
+<p>This example illustrates how the node classification package can be used
+to check whether the structural properties of the gene co-expression network
+improve the performance of the prediction of gene functions for rice
+(<em>Oryza sativa Japonica</em>). In this example, a gene co-expression network
+gathered from <a class="reference external" href="https://atted.jp/">ATTED II</a> is used.</p>
+<section id="how-to-run-the-example">
+<h4>How to run the example?<a class="headerlink" href="#how-to-run-the-example" title="Permalink to this headline">¶</a></h4>
+<p>The complete source code of the example can be found in the
+<a class="reference external" href="https://github.com/migueleci/node_classification">GitHub repository</a>. First, the
+<em>xgbfnc</em> package need to be imported:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nodeclass.models</span> <span class="kn">import</span> <span class="n">xgbfn</span>
+<span class="kn">from</span> <span class="nn">nodeclass.tools</span> <span class="kn">import</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>After creating adjacency matrix <code class="docutils literal notranslate"><span class="pre">adj</span></code> for the network, the structural
+properties are computed using the module <cite>data</cite> of the package:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">,</span> <span class="n">strc_cols</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">compute_strc_prop</span><span class="p">(</span><span class="n">adj</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This method returns a DataFrame with the structural properties of the network
+and a list of the names of these properties (i.e., column names). After adding
+the additional features of the network to the DataFrame, the XGBhc module is
+used to instantiate the XGBhc class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">XGBhc</span><span class="p">()</span>
+<span class="n">test</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">strc_cols</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
+<span class="n">ans</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">structural_test</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The data of the network is loaded using the <code class="docutils literal notranslate"><span class="pre">load_data</span></code> method. And the
+structural test is execute using the <code class="docutils literal notranslate"><span class="pre">structural_test</span></code> method. The test
+returns a boolean value which indicates whether the structural properties
+help to improve the prediction performance, the prediction for the model
+including the structural properties and its best parameters.</p>
+<p>To run the example execute the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">test</span><span class="o">/</span><span class="n">flat_classification</span>
+<span class="n">python3</span> <span class="n">test_small</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="id3">
+<h3>Hierarchical classification<a class="headerlink" href="#id3" title="Permalink to this headline">¶</a></h3>
+<p>This example illustrates how the hierarchical classification package can
+be used to predict gene functions considering the hierachical structure of
+gene functions (as determined by <a class="reference external" href="http://geneontology.org/">Gene Ontology</a>)
+based on the gene co-expression network. This example uses the data for rice
+(<em>Oryza sativa Japonica</em>),the gene co-expression network (GCN) was
+gathered from <a class="reference external" href="https://atted.jp/">ATTED II</a>.</p>
+<section id="id5">
+<h4>How to run the example?<a class="headerlink" href="#id5" title="Permalink to this headline">¶</a></h4>
+<p>The complete source code of the example can be found in the
+<a class="reference external" href="https://github.com/migueleci/node_classification">GitHub repository</a>. First, the
+<em>xgbhc</em> package need to be imported:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nodeclass.models</span> <span class="kn">import</span> <span class="n">xgbhc</span>
+<span class="kn">from</span> <span class="nn">nodeclass.tools</span> <span class="kn">import</span> <span class="n">data</span>
+</pre></div>
+</div>
+<p>The adjacency matrix for the GCN and the gene functions (from ancestral
+relations of biological processes), and the matrix of associations between
+genes and functions are created using the packaga <code class="docutils literal notranslate"><span class="pre">data</span></code> as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">gcn</span><span class="p">,</span> <span class="n">go_by_go</span><span class="p">,</span> <span class="n">gene_by_go</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">create_matrices</span><span class="p">(</span><span class="n">data_ppi</span><span class="p">,</span> <span class="n">data_isa</span><span class="p">,</span> <span class="n">data_term_def</span><span class="p">,</span> <span class="n">data_gene_term</span><span class="p">,</span> <span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The tree representation of the hierarchy is generated from the adjacency
+matrix of the classes by removing the isolated classes, filtering the classes
+according to the number of nodes associated (if required) and finding the
+sub-hierarchies remaining. Then a
+<a class="reference external" href="https://en.wikipedia.org/wiki/Minimum_spanning_tree">minimum spanning tree</a>
+(MST) algorithm is applied to each sub-hierarchy to get the its tree
+representation (the order and ancestors of the classes will be calculated):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">roots</span><span class="p">,</span> <span class="n">subh_go_list</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">generate_hierarchy</span><span class="p">(</span><span class="n">gcn</span><span class="p">,</span> <span class="n">go_by_go</span><span class="p">,</span> <span class="n">gene_by_go</span><span class="p">,</span> <span class="n">data_term_def</span><span class="p">,</span> <span class="n">G</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">OUTPUT_PATH</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span><span class="mi">300</span><span class="p">],</span> <span class="n">trace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">root</span><span class="p">,</span> <span class="n">subh_go</span> <span class="o">=</span> <span class="n">roots</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="n">subh_go_list</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span>
+<span class="n">subh_adj</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">hierarchy_to_tree</span><span class="p">(</span><span class="n">gcn</span><span class="p">,</span> <span class="n">go_by_go</span><span class="p">,</span> <span class="n">gene_by_go</span><span class="p">,</span> <span class="n">T</span><span class="p">,</span> <span class="n">subh_go</span><span class="p">,</span> <span class="n">OUTPUT_PATH</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Additionally, the structural properties of the sub-graph of the GCN,
+corresponding to the set of nodes associated to the classes in the
+sub-hierarchy, are computed using the module <cite>data</cite>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data</span><span class="o">.</span><span class="n">compute_strc_prop</span><span class="p">(</span><span class="n">subh_adj</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="n">OUTPUT_PATH</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Finally, the XGBhc class is instantiated, the data of the sub-hierarchy is
+loaded and the prediction is done as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">XGBhc</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">root</span><span class="p">,</span> <span class="n">hierarchy</span><span class="p">,</span> <span class="n">ancestors</span><span class="p">,</span> <span class="n">DATA_PATH</span><span class="p">,</span> <span class="n">OUTPUT_PATH</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">train_hierarchy</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The results of the prediction are saved on the <code class="docutils literal notranslate"><span class="pre">OUTPUT_PATH</span></code>, including the
+roc and precision-recall curve, the confusion matrix and a csv file with some
+performance metrics (such as the auc roc, average precision, recall, precision
+and F1, true positive and true negative rate and the execution time).</p>
+<p>To run the example execute the following commands:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cd</span> <span class="n">test</span><span class="o">/</span><span class="n">hierarchical_classification</span>
+<span class="n">python3</span> <span class="n">test_data</span><span class="o">.</span><span class="n">py</span>
+<span class="n">python3</span> <span class="n">test</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</section>
+</section>
+</section>
+</section>
+<section id="documentation">
+<h1>Documentation<a class="headerlink" href="#documentation" title="Permalink to this headline">¶</a></h1>
+<p>Documentation of the package can be found <a class="reference external" href="https://nodeclass.readthedocs.io/en/latest/">here</a>.</p>
+<section id="models-package">
+<h2>Models package<a class="headerlink" href="#models-package" title="Permalink to this headline">¶</a></h2>
+<section id="module-nodeclass.models.xgbfnc">
+<span id="flat-node-classification-module"></span><h3>Flat node classification module<a class="headerlink" href="#module-nodeclass.models.xgbfnc" title="Permalink to this headline">¶</a></h3>
+<p>Module for flat node classification and testing the importance of the
+structural properties of the network.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">nodeclass.models.xgbfnc.</span></span><span class="sig-name descname"><span class="pre">XGBfnc</span></span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for flat node classification. This class builds two XGBoost binary
+classifier for the attribute prediction using two datasets with different
+features, one including structural properties of the network and the other
+one without them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – Datasets with all features of the network.</p></li>
+<li><p><strong>orig_cols</strong> (<em>List</em><em>[</em><em>string</em><em>]</em>) – List of feature names (columns of df)
+<strong>non</strong> realted to structural properties of the network.</p></li>
+<li><p><strong>strc_cols</strong> (<em>List</em><em>[</em><em>string</em><em>]</em>) – List of feature names (columns of df)
+realted to structural properties of the network. The intersection between
+<strong>orig_cols</strong> and <strong>strc_cols</strong> must be empty.</p></li>
+<li><p><strong>y</strong> (<em>Series</em>) – Serie representing the node attribute to be predicted.</p></li>
+<li><p><strong>ylabel</strong> (<em>string</em>) – Name of the node attribute to be predcited.</p></li>
+<li><p><strong>output_path</strong> (<em>string</em>) – Path where the output of the algorithm will
+be stored.</p></li>
+<li><p><strong>figs_pat</strong> (<em>string</em>) – Path where the figures will be stored.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.compare_plots">
+<span class="sig-name descname"><span class="pre">compare_plots</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['without',</span> <span class="pre">'with']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.compare_plots" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot roc curve, precision-recall curve and confussion matrices for the
+prediction of both models, i.e., without and with structural properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities for the model <strong>without</strong> the structural
+properties of the network.</p></li>
+<li><p><strong>b</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities for the model <strong>including</strong> the
+structural properties of the network.</p></li>
+<li><p><strong>labels</strong> (<em>List</em><em>[</em><em>string</em><em>]</em>) – Labels of both models for the plots.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.create_classifier">
+<span class="sig-name descname"><span class="pre">create_classifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs_cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs_xgb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aucpr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'recall'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.create_classifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the binary classifier within a hyper-parameters tuning model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_iter</strong> (<em>int</em>) – Number of iterations in cross validation for
+hyper-parameters tuning, defaults to 5</p></li>
+<li><p><strong>n_jobs_cv</strong> (<em>int</em>) – Number of parallel jobs running for hyper-parameters
+tuning, defaults to None</p></li>
+<li><p><strong>n_jobs_xgb</strong> (<em>int</em>) – Number of parallel jobs running for training the
+classifier, defaults to 2</p></li>
+<li><p><strong>eval_metric</strong> (<em>string</em>) – Evaluation metric for training the classifier,
+defaults to “aucpr”</p></li>
+<li><p><strong>scoring</strong> (<em>string</em>) – Scoring metric for hyper-parameters tuning, defaults
+to “recall”</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Random number seed, defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Hyper-parameter tuning model with XGBoost binary classsifier</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>RandomizedSearchCV</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.create_path">
+<span class="sig-name descname"><span class="pre">create_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.create_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>string</em>) – Relative path to be created.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>OSError</strong> – the path already exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_orig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred_prob</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the performance of the prediction using metrics such as the
+auc roc, average precision score, precision, recall and F1 score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_orig</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Truth values of the prediction.</p></li>
+<li><p><strong>y_pred_prob</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities with the XGBoost classifier.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Evaluation metrics for the prediction.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict[string-&gt;float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">strc_cols</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ylabel</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figs_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.load_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the data of the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>df</strong> (<em>DataFrame</em>) – Dataset with all node features.</p></li>
+<li><p><strong>strc_cols</strong> (<em>List</em><em>[</em><em>string</em><em>]</em>) – List of features related to structural properties.</p></li>
+<li><p><strong>y</strong> (<em>Series</em>) – Node attribute to be predicted. Should be the same size as the df.</p></li>
+<li><p><strong>ylabel</strong> (<em>string</em>) – Name of the node attribute to be predicted.</p></li>
+<li><p><strong>output_path</strong> (<em>string</em>) – Path to save output, defaults to <cite>“YYYY-MM-DD/”</cite>.</p></li>
+<li><p><strong>figs_path</strong> (<em>string</em>) – Path to save figs, defaults to <cite>“YYYY-MM-DD/”</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.opt_threshold">
+<span class="sig-name descname"><span class="pre">opt_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_orig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.opt_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the classification from probabilities based on the optimum
+threshold according to precision-recall curve, that is the threshold
+that maximies the F1 score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_orig</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Truth values of the prediction.</p></li>
+<li><p><strong>y_pred</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities with the XGBoost classifier.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Classification for the input array of probabilities which
+maximies F1 score.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.plot_performance">
+<span class="sig-name descname"><span class="pre">plot_performance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.plot_performance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot roc curve, precision-recall curve and confussion matrices for a
+prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities for the model.</p></li>
+<li><p><strong>label</strong> (<em>string</em>) – Label of the models for the plots.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.print_performance">
+<span class="sig-name descname"><span class="pre">print_performance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scores</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.print_performance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Print the evaluation metrics for the prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>scores</strong> (<em>dict</em><em>[</em><em>string-&gt;float</em><em>]</em>) – Evaluation metrics for the prediction.</p></li>
+<li><p><strong>title</strong> (<em>string</em>) – Name of the model or experiment.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.structural_test">
+<span class="sig-name descname"><span class="pre">structural_test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">csv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.structural_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Test whether the structural properties of the network help to improve the
+prediction performance by building two different models and compare their
+results. One model includes the structural properties, whereas the other
+not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_splits</strong> (<em>int</em>) – Number of folds for cross-validation, defaults to 5</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Random number seed, defaults to None</p></li>
+<li><p><strong>log</strong> (<em>bool</em>) – Flag for logging of the results of the test, default to False</p></li>
+<li><p><strong>csv</strong> (<em>bool</em>) – Flag for saving the results of the test in a csv file, defaults
+to True</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Result of the structural test (True if the the structural
+properties improve the prediction performance, False otherwise),
+predicted labels and best parameter combination for the classfifier
+including the structural properties.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple(bool, np.array[Int], dict[string-&gt;float])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs_cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs_xgb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aucpr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'recall'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the performance of the prediction using metrics such as the
+auc roc, average precision score, precision, recall and F1 score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>DataFrame</em>) – Iput dataset for the prediction.</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em>) – Number of folds for cross-validation, defaults to 5</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Random number seed, defaults to None</p></li>
+<li><p><strong>n_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of iterations in cross validation for
+hyper-parameters tuning, defaults to 5</p></li>
+<li><p><strong>n_jobs_cv</strong> (<em>int</em>) – Number of parallel jobs running for hyper-parameters
+tuning, defaults to None</p></li>
+<li><p><strong>n_jobs_xgb</strong> (<em>int</em>) – Number of parallel jobs running for training the
+classifier, defaults to 2</p></li>
+<li><p><strong>eval_metric</strong> (<em>string</em>) – Evaluation metric for training the classifier,
+defaults to “aucpr”</p></li>
+<li><p><strong>scoring</strong> (<em>string</em>) – Scoring metric for hyper-parameters tuning, defaults to
+“recall”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Predicted probabilities with the XGBoost classifier, feature
+importance measured by total gain, and best parameter combination for
+the classfifier.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple(np.array[float], dict[string-&gt;float], dict[string-&gt;float])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbfnc.XGBfnc.write_csv">
+<span class="sig-name descname"><span class="pre">write_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">a</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">['without',</span> <span class="pre">'with']</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbfnc.XGBfnc.write_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the evaluation metrics for prediction of both models, i.e., without
+and with structural properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>a</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities for the model <strong>without</strong> the structural
+properties of the network.</p></li>
+<li><p><strong>b</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities for the model <strong>including</strong> the
+structural properties of the network.</p></li>
+<li><p><strong>labels</strong> (<em>List</em><em>[</em><em>string</em><em>]</em>) – Labels of both models for the plots.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-nodeclass.models.xgbhc">
+<span id="hierarchical-node-classification-module"></span><h3>Hierarchical node classification module<a class="headerlink" href="#module-nodeclass.models.xgbhc" title="Permalink to this headline">¶</a></h3>
+<p>Module for hierarchical node classification using a top-down approach.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">nodeclass.models.xgbhc.</span></span><span class="sig-name descname"><span class="pre">XGBhc</span></span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Class for hierarchical node classification. This class builds an
+XGBoost binary classifier for each class following a top-down approach.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>DataFrame</em>) – Dataset with the graph information (topological properties of
+nodes) similar for all classes in the hierarchy.</p></li>
+<li><p><strong>hierarchy</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – List of classes in the hierarchy</p></li>
+<li><p><strong>ancestors</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – List of ancestors of each class in the hierarchy, i.e., tree
+representation. Labels in ‘ancestors’
+must match with the lebels of the classes in ‘hierarchy’.</p></li>
+<li><p><strong>label</strong> (<em>string</em>) – Label of the hierarchy, used to name the figures and output files.</p></li>
+<li><p><strong>data_path</strong> (<em>string</em>) – Path where the data of the model is stored. In particular,
+the specific data for each class in the hierarchy. Files in ‘data_path’
+must match with the lebels of the classes in ‘hierarchy’.</p></li>
+<li><p><strong>output_path</strong> (<em>string</em>) – Path where the output of the algorithm will be stored.</p></li>
+<li><p><strong>figs_path</strong> (<em>string</em>) – Path where the figures will be stored.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.check_data">
+<span class="sig-name descname"><span class="pre">check_data</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.check_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Verify the input data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>flag indicating whether the input data is ok or not.</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>boolean</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.create_classifier">
+<span class="sig-name descname"><span class="pre">create_classifier</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs_cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs_xgb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aucpr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'recall'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.create_classifier" title="Permalink to this definition">¶</a></dt>
+<dd><p>Builds the binary classifier within a hyper-parameters tuning model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_iter</strong> (<em>int</em>) – Number of iterations in cross validation for
+hyper-parameters tuning, defaults to 5</p></li>
+<li><p><strong>n_jobs_cv</strong> (<em>int</em>) – Number of parallel jobs running for hyper-parameters
+tuning, defaults to None</p></li>
+<li><p><strong>n_jobs_xgb</strong> (<em>int</em>) – Number of parallel jobs running for training the
+classifier, defaults to 2</p></li>
+<li><p><strong>eval_metric</strong> (<em>string</em>) – Evaluation metric for training the classifier,
+defaults to “aucpr”</p></li>
+<li><p><strong>scoring</strong> (<em>string</em>) – Scoring metric for hyper-parameters tuning, defaults
+to “recall”</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – Random number seed, defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Hyper-parameter tuning model with XGBoost binary classsifier</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>RandomizedSearchCV</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.create_path">
+<span class="sig-name descname"><span class="pre">create_path</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.create_path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a path.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>path</strong> (<em>string</em>) – Relative path to be created.</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>OSError</strong> – the path already exist</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.evaluate">
+<span class="sig-name descname"><span class="pre">evaluate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_orig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred_prob</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.evaluate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the performance of the prediction using metrics such as the
+auc roc, average precision score, precision, recall and F1 score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_orig</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Truth values of the prediction.</p></li>
+<li><p><strong>y_pred_prob</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities with the XGBoost classifier.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Evaluation metrics for the prediction.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>dict[string-&gt;float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.load_data">
+<span class="sig-name descname"><span class="pre">load_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hierarchy</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ancestors</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figs_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.load_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Load the data of the network and the hierarchy of classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>DataFrame</em>) – Dataset with the graph information (topological properties of
+nodes) similar for all classes in the hierarchy.</p></li>
+<li><p><strong>hierarchy</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – List of classes in the hierarchy</p></li>
+<li><p><strong>ancestors</strong> (<em>list</em><em>[</em><em>int</em><em>]</em>) – List of ancestors of each class in the hierarchy, i.e., tree
+representation.</p></li>
+<li><p><strong>label</strong> (<em>string</em>) – Label of the hierarchy, used to name the figures and output files.</p></li>
+<li><p><strong>data_path</strong> (<em>string</em>) – Path where the data of the model is stored. In particular,
+the specific data for each class in the hierarchy.</p></li>
+<li><p><strong>output_path</strong> (<em>string</em>) – Path where the output of the algorithm will be stored,
+defaults to <cite>“YYYY-MM-DD/”</cite>.</p></li>
+<li><p><strong>figs_path</strong> (<em>string</em>) – Path where the figures will be stored, defaults
+to <cite>“YYYY-MM-DD/”</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.opt_threshold">
+<span class="sig-name descname"><span class="pre">opt_threshold</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_orig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y_pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.opt_threshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the classification from probabilities based on the optimum
+threshold according to precision-recall curve, that is the threshold
+that maximies the F1 score.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_orig</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Truth values of the prediction.</p></li>
+<li><p><strong>y_pred</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities with the XGBoost classifier.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Classification for the input array of probabilities which
+maximies F1 score.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.plot_performance">
+<span class="sig-name descname"><span class="pre">plot_performance</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">yorig</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ypred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.plot_performance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot roc curve, precision-recall curve and confussion matrices for a
+prediction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>y_orig</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – Truth values of the prediction.</p></li>
+<li><p><strong>y_pred_prob</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities with the XGBoost classifier.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.train_class">
+<span class="sig-name descname"><span class="pre">train_class</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_splits</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs_cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs_xgb</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">eval_metric</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'aucpr'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scoring</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'recall'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.train_class" title="Permalink to this definition">¶</a></dt>
+<dd><p>Training using a combination of SMOTE (Over-Sampling) and XGBoost techniques.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<em>DataFrame</em>) – X</p></li>
+<li><p><strong>y</strong> (<em>np.array</em>) – y</p></li>
+<li><p><strong>n_splits</strong> (<em>int</em>) – n_splits</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – seed</p></li>
+<li><p><strong>n_iter</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of iterations in cross validation for
+hyper-parameters tuning, defaults to 5</p></li>
+<li><p><strong>n_jobs_cv</strong> (<em>int</em>) – Number of parallel jobs running for hyper-parameters
+tuning, defaults to None</p></li>
+<li><p><strong>n_jobs_xgb</strong> (<em>int</em>) – Number of parallel jobs running for training the
+classifier, defaults to 2</p></li>
+<li><p><strong>eval_metric</strong> (<em>string</em>) – Evaluation metric for training the classifier,
+defaults to “aucpr”</p></li>
+<li><p><strong>scoring</strong> (<em>string</em>) – Scoring metric for hyper-parameters tuning, defaults to
+“recall”</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Predicted probabilities with the XGBoost classifier, feature
+importance measured by total gain, and best parameter combination for
+the classfifier.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple(np.array[float], dict[string-&gt;float], dict[string-&gt;float])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.train_hierarchy">
+<span class="sig-name descname"><span class="pre">train_hierarchy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n_splits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.train_hierarchy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hierarchical classification of nodes using a local classifier. This approach uses
+a bfs to traverse the hierarchy, represented as a tree (no node has more than ones
+parent).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>n_splits</strong> (<em>int</em>) – n_splits</p></li>
+<li><p><strong>seed</strong> (<em>int</em>) – seed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Predicted probabilities and classification predicted with the
+algorithm, feature importance measured by total gain, and best parameter
+combination for the classfifier.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple(np.array[float], dict[string-&gt;float], dict[string-&gt;float])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="nodeclass.models.xgbhc.XGBhc.write_csv">
+<span class="sig-name descname"><span class="pre">write_csv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pred</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.models.xgbhc.XGBhc.write_csv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save the evaluation metrics for prediction of both models, i.e., without
+and with structural properties.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pred</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Predicted probabilities for the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+<section id="tools-package">
+<h2>Tools package<a class="headerlink" href="#tools-package" title="Permalink to this headline">¶</a></h2>
+<section id="module-nodeclass.tools.data">
+<span id="data-processing-module"></span><h3>Data processing module<a class="headerlink" href="#module-nodeclass.tools.data" title="Permalink to this headline">¶</a></h3>
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.data.compute_strc_prop">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.data.</span></span><span class="sig-name descname"><span class="pre">compute_strc_prop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adj_mad</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dimensions</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">p</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">q</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.data.compute_strc_prop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute multiple structural properties of the input network. Two types of
+properties are computed: hand-crafted and node embeddings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adj_mad</strong> (<em>np.matrix</em><em>[</em><em>int</em><em>]</em>) – Adjacency matrix representation of the network, square and
+symmetric matrix.</p></li>
+<li><p><strong>dimensions</strong> (<em>int</em>) – Dimension of the node embedding, defaults to 16</p></li>
+<li><p><strong>p</strong> (<em>float</em>) – Return parameter of node2vec, defaults to 1</p></li>
+<li><p><strong>q</strong> (<em>floar</em>) – In-out parameter of node2vec, defaults to 0.5</p></li>
+<li><p><strong>path</strong> (<em>string</em>) – Relative path where the dataset will be saved, defaults to
+current path</p></li>
+<li><p><strong>log</strong> (<em>bool</em>) – Flag for logging of the results of the test, default to False</p></li>
+<li><p><strong>seed</strong> (<em>float</em>) – Random number seed, defaults to None</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dataset with scaled features representing the structural properties
+of the network and list of labels (names) of the features.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple(Dataframe, List[string])</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.data.create_matrices">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.data.</span></span><span class="sig-name descname"><span class="pre">create_matrices</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edgl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isa</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_def</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n2c</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.data.create_matrices" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create the adjacency and association matrices of the nodes and classes from
+the edglists for the graph and the associations between classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edgl</strong> (<em>Dataframe</em>) – Edgelist of the graph with columns ‘Source’ and ‘Target’</p></li>
+<li><p><strong>isa</strong> (<em>DataFrame</em>) – Edgelist of the initial representations of the
+associations between classes with columns ‘Class’ and ‘Ancestor’</p></li>
+<li><p><strong>cls_def</strong> (<em>DataFrame</em>) – Description of the classes with columns ‘Class’ and ‘Desc’</p></li>
+<li><p><strong>n2c</strong> (<em>DataFrame</em>) – Associations between classes and nodes by pairs ‘(node, class)’
+with columns ‘Node’ and ‘Class’</p></li>
+<li><p><strong>output_path</strong> (<em>string</em>) – Path where the output is stored</p></li>
+<li><p><strong>trace</strong> (<em>boolean</em>) – Flag to print the trace of the process</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Adjacency matrix of the nodes, adjacency matrix of the classes,
+association matrix between nodes and classes, list of nodes and list of
+classes in the same order of the matrices</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.matrix[float] <em>MxM</em>, np.matrix[float] <em>NxN</em>,
+np.matrix[float] <em>MxN</em>, np.array[string] <em>M</em>, np.array[string] <em>N</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.data.create_txt">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.data.</span></span><span class="sig-name descname"><span class="pre">create_txt</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.data.create_txt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a txt file from a list of objects</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<em>list</em><em>[</em><em>object</em><em>]</em>) – List of objects (strings or numbers) to be stored as txt file</p></li>
+<li><p><strong>output_path</strong> (<em>string</em>) – Path where the txt file is stored</p></li>
+<li><p><strong>filename</strong> (<em>string</em>) – Name of the txt file</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.data.generate_hierarchy">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.data.</span></span><span class="sig-name descname"><span class="pre">generate_hierarchy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_adj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_by_cl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls_def</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">V</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trace</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.data.generate_hierarchy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the possible sub-hierarchies of the hieararchy of classes by removing
+the isolated classes and applying a filter (if required) to the number of
+nodes associated from the adjacency and association matrices of graph and
+classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adj</strong> (np.matrix[float] <em>MxM</em>) – Adjacency matrix of the nodes</p></li>
+<li><p><strong>cl_adj</strong> (np.matrix[float] <em>NxN</em>) – Adjacency matrix of the classes</p></li>
+<li><p><strong>node_by_cl</strong> (np.matrix[float] <em>MxN</em>) – Association matrix between nodes and classes</p></li>
+<li><p><strong>cls_def</strong> (<em>DataFrame</em>) – Description of the classes with columns ‘Class’ and ‘Desc’</p></li>
+<li><p><strong>V</strong> (np.array[string] <em>M</em>) – List of nodes in the same order of the ‘adj’ matrix</p></li>
+<li><p><strong>C</strong> (np.array[string] <em>N</em>) – List of classes in the same order of the ‘cl_adj’ matrix</p></li>
+<li><p><strong>output_path</strong> (<em>string</em>) – Path where the output is stored</p></li>
+<li><p><strong>filter</strong> (<em>Tuple</em><em>[</em><em>int</em><em>, </em><em>int</em><em>]</em>) – Filter applied to the classes to be used for prediction from
+the hierarchy, lower and upper bound of the number of nodes associated to
+the classes, default to None</p></li>
+<li><p><strong>trace</strong> (<em>boolean</em>) – Flag to print the trace of the process, default to False</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of roots (class index) of each sub-hierarchy from the hierarchy
+of classes, list of classes (indexes) within each sub-hiearchy (the first
+element of the list is the root class)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array[int], np.array[np.array[int]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.data.hierarchy_to_tree">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.data.</span></span><span class="sig-name descname"><span class="pre">hierarchy_to_tree</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_adj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_by_cl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">C</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hier_cl_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.data.hierarchy_to_tree" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generates the tree representation of the hierarchy from the adjacency and
+association matrices of graph and classes. Generates two files: the order of
+classes in the hierarchy (tree representation) and the ancestors of each class
+(in the same order)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adj</strong> (np.matrix[float] <em>MxM</em>) – Adjacency matrix of the nodes</p></li>
+<li><p><strong>cl_adj</strong> (np.matrix[float] <em>NxN</em>) – Adjacency matrix of the classes</p></li>
+<li><p><strong>node_by_cl</strong> (np.matrix[float] <em>MxN</em>) – Association matrix between nodes and classes</p></li>
+<li><p><strong>C</strong> (np.array[string] <em>N</em>) – List of classes in the same order of the ‘cl_adj’ matrix</p></li>
+<li><p><strong>hier_cl_idx</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – list of classes (indexes) within the hiearchy (the first
+element of the list is the root class), where ‘hier_cl_idx’ is a subset
+of ‘C’</p></li>
+<li><p><strong>output_path</strong> (<em>string</em>) – Path where the output is stored</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Adjacency matrix of the corresponding subgraph of the hieararchy, i.e.,
+subgraph of all nodes associated to the root class of the hierarchy</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.matrix[float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.data.neighborhood_information">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.data.</span></span><span class="sig-name descname"><span class="pre">neighborhood_information</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">adj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_by_cl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_idx</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">anc_idx</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.data.neighborhood_information" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the information of the association of a class and its ancestor in
+the neigborhood of the nodes in the graph (using the adjacency matrix)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>adj</strong> (np.matrix[float] <em>MxM</em>) – Adjacency matrix of the nodes</p></li>
+<li><p><strong>node_by_cl</strong> (np.matrix[float] <em>MxN</em>) – Association matrix between nodes and classes</p></li>
+<li><p><strong>nodes</strong> (<em>np.array</em><em>[</em><em>int</em><em>]</em>) – List of indexes of nodes to be considered</p></li>
+<li><p><strong>cl_idx</strong> (<em>int</em>) – Index of the class to be analyzed</p></li>
+<li><p><strong>anc_idx</strong> (<em>int</em>) – Index of the ancestor of the class to be analyzed</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Lis of prability of association between the ‘nodes’ and the class,
+the ‘nodes’ and its ancestor, and the ‘nodes’ and the class given the
+probability of association with its ancestor</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array[np.array[float], np.array[float], np.array[float]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.data.nodes_in_bfs">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.data.</span></span><span class="sig-name descname"><span class="pre">nodes_in_bfs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bfs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">root</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.data.nodes_in_bfs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert a bfs object to a list</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bfs</strong> (<em>object</em>) – bfs object from networkx</p></li>
+<li><p><strong>root</strong> (<em>int</em>) – id of the root in the bfs</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>list of nodes in the subgraph in bfs order</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.data.scale_data">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.data.</span></span><span class="sig-name descname"><span class="pre">scale_data</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.data.scale_data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Scale the data of a dataset without modifying the distribution of data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>data</strong> (<em>DataFrame</em>) – Dataset</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Dataset with scaled features</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Dataframe</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-nodeclass.tools.mst">
+<span id="mst-algorithm-module"></span><h3>MST algorithm module<a class="headerlink" href="#module-nodeclass.tools.mst" title="Permalink to this headline">¶</a></h3>
+<p>Module containing minimum spanning tree algorithm (MST) to turn a hierarchy of
+classes represented as a directed acyclic graph (DAG) into a tree. The
+algorithm uses the number of nodes associated to each class to select to select
+a parent class.</p>
+<p>This algorithm is an adaptation of the algorithm used in (<a class="reference external" href="http://www.biomedcentral.com/1471-2105/9/350">Jiang et. al. 2008</a>).</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.mst.direct_pa">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.mst.</span></span><span class="sig-name descname"><span class="pre">direct_pa</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hie</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.mst.direct_pa" title="Permalink to this definition">¶</a></dt>
+<dd><p>Find the direct parents for a given class in a given heirarchy. The direct
+parents of a class are the set of classes that do not have any other
+descendant.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cl</strong> (<em>string</em>) – List of indexes of the class for which the direct parents are
+being searched</p></li>
+<li><p><strong>cls</strong> (list[string] of size <em>N</em>) – List of indexes of the classes in the hierarchy to be considered
+by the algorithm</p></li>
+<li><p><strong>hie</strong> (np.matrix[float] of size <em>NxN</em>) – Adjacency matrix representing the hierarchy of classes considered
+in ‘cls’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>List of indexes of direct parents of the class ‘cl’ in the hierarchy</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>list[int]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.mst.mst">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.mst.</span></span><span class="sig-name descname"><span class="pre">mst</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nodes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cls</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_by_cl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cl_by_cl</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.mst.mst" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimal spanning tree (MST) algorithm for a hierarchy of classes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>nodes</strong> (np.arrat[int] of size <em>M</em>) – List of indexes of the nodes to be considered by the algorithm</p></li>
+<li><p><strong>cls</strong> (list[string] of size <em>N</em>) – List of indexes of the classes in the hierarchy to be considered
+by the algorithm</p></li>
+<li><p><strong>node_by_cl</strong> (np.matrix(float) of size <em>PxM</em>) – Matrix representing the associations between nodes and
+classes, where <em>PgeqN</em> is the total number of classes in the hierarchy.</p></li>
+<li><p><strong>cl_by_cl</strong> (np.matrix(float) of size <em>PxP</em>) – Adjacency matrix representing the hierarchy of classes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Adjacency matrix of the tree representation of the hierarchy of
+classes considered in ‘cls’</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.matrix[float] of size <em>NxN</em></p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-nodeclass.tools.plots">
+<span id="plotting-module"></span><h3>Plotting module<a class="headerlink" href="#module-nodeclass.tools.plots" title="Permalink to this headline">¶</a></h3>
+<p>Module for plotting the results of the prediction.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.plots.plot_conf_matrix">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.plots.</span></span><span class="sig-name descname"><span class="pre">plot_conf_matrix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cm</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.plots.plot_conf_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a confusion matrix and save it in a PDF file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>cm</strong> (<em>np.matrix</em><em>[</em><em>float</em><em>]</em>) – Confusion matrix</p></li>
+<li><p><strong>filename</strong> (<em>string</em>) – Name of the PDF file</p></li>
+<li><p><strong>path</strong> (<em>string</em>) – Path where the plot will be stored.</p></li>
+<li><p><strong>labels</strong> (<em>List</em><em>[</em><em>float</em><em>]</em>) – Labels of the classes used in both axis of the matrix, default to [0,1].</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.plots.plot_pr">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.plots.</span></span><span class="sig-name descname"><span class="pre">plot_pr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ap</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.plots.plot_pr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a precision-recall curve and save it in a PDF file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rec</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Array of recall values</p></li>
+<li><p><strong>prc</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Array of precision values</p></li>
+<li><p><strong>ap</strong> (<em>float</em>) – Average precision score</p></li>
+<li><p><strong>filename</strong> (<em>string</em>) – Name of the PDF file</p></li>
+<li><p><strong>path</strong> (<em>string</em>) – Path where the plot will be stored.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.plots.plot_roc">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.plots.</span></span><span class="sig-name descname"><span class="pre">plot_roc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tpr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.plots.plot_roc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot a ROC curve and save it in a PDF file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fpr</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Array of false positive rate values</p></li>
+<li><p><strong>tpr</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Array of true positive rate values</p></li>
+<li><p><strong>auc</strong> (<em>float</em>) – Area under roc curve</p></li>
+<li><p><strong>filename</strong> (<em>string</em>) – Name of the PDF file</p></li>
+<li><p><strong>path</strong> (<em>string</em>) – Path where the plot will be stored.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+</section>
+<section id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></p></li>
+<li><p><a class="reference internal" href="py-modindex.html"><span class="std std-ref">Module Index</span></a></p></li>
+<li><p><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></p></li>
+</ul>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Welcome to Node Classification</a><ul>
+<li><a class="reference internal" href="#node-classification">Node classification</a><ul>
+<li><a class="reference internal" href="#flat-classification">Flat classification</a></li>
+<li><a class="reference internal" href="#hierarchical-classification">Hierarchical classification</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#example">Example</a><ul>
+<li><a class="reference internal" href="#id1">Flat classification</a><ul>
+<li><a class="reference internal" href="#how-to-run-the-example">How to run the example?</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#id3">Hierarchical classification</a><ul>
+<li><a class="reference internal" href="#id5">How to run the example?</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#documentation">Documentation</a><ul>
+<li><a class="reference internal" href="#models-package">Models package</a><ul>
+<li><a class="reference internal" href="#module-nodeclass.models.xgbfnc">Flat node classification module</a></li>
+<li><a class="reference internal" href="#module-nodeclass.models.xgbhc">Hierarchical node classification module</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#tools-package">Tools package</a><ul>
+<li><a class="reference internal" href="#module-nodeclass.tools.data">Data processing module</a></li>
+<li><a class="reference internal" href="#module-nodeclass.tools.mst">MST algorithm module</a></li>
+<li><a class="reference internal" href="#module-nodeclass.tools.plots">Plotting module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">nodeclass alpha documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Welcome to Node Classification</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2021, Miguel Romero.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 4.0.2.
+    </div>
+  </body>
+</html>

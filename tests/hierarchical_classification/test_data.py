@@ -9,9 +9,8 @@ import numpy as np
 import pandas as pd
 
 
-# XGBhc library
-from context import xgbhc
-from xgbhc import data
+# nodeclass library
+from nodeclass.tools import data
 
 PATH = "/home/miguel/projects/omics/XGBhc/test"
 DATA_PATH = "{0}/{1}".format(PATH, "raw_data")

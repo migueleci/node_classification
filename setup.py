@@ -43,7 +43,5 @@ setup(
       'Programming Language :: Python :: 3',
       'Programming Language :: Python :: 3.6',
     ],
-    package_dir={"": "nodeclass"},
-    packages=setuptools.find_packages(where="nodeclass"),
     python_requires=">=3.6",
 )
