@@ -98,7 +98,7 @@ gathered from <a class="reference external" href="https://atted.jp/">ATTED II</a
 <p>The complete source code of the example can be found in the
 <a class="reference external" href="https://github.com/migueleci/node_classification">GitHub repository</a>. First, the
 <em>xgbfnc</em> package need to be imported:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nodeclass.models</span> <span class="kn">import</span> <span class="n">xgbfn</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nodeclass.models.xgbfnc</span> <span class="kn">import</span> <span class="n">XGBfnc</span>
 <span class="kn">from</span> <span class="nn">nodeclass.tools</span> <span class="kn">import</span> <span class="n">data</span>
 </pre></div>
 </div>
@@ -141,7 +141,7 @@ gathered from <a class="reference external" href="https://atted.jp/">ATTED II</a
 <p>The complete source code of the example can be found in the
 <a class="reference external" href="https://github.com/migueleci/node_classification">GitHub repository</a>. First, the
 <em>xgbhc</em> package need to be imported:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nodeclass.models</span> <span class="kn">import</span> <span class="n">xgbhc</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">nodeclass.models.xgbhc</span> <span class="kn">import</span> <span class="n">XGBhc</span>
 <span class="kn">from</span> <span class="nn">nodeclass.tools</span> <span class="kn">import</span> <span class="n">data</span>
 </pre></div>
 </div>
@@ -1003,6 +1003,24 @@ classes considered in ‘cls’</p>
 </dd></dl>
 
 <dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.plots.plot_prs">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.plots.</span></span><span class="sig-name descname"><span class="pre">plot_prs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">recl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prcl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.plots.plot_prs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot multiple precision-recall curves in the same figure and save it in a PDF file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>recl</strong> (<em>np.arry</em><em>[</em><em>np.array</em><em>[</em><em>float</em><em>]</em><em>]</em>) – Array of arrays of recall values for multiple predictions</p></li>
+<li><p><strong>prcl</strong> (<em>np.arry</em><em>[</em><em>np.array</em><em>[</em><em>float</em><em>]</em><em>]</em>) – Array of arrays of precision values for multiple predictions</p></li>
+<li><p><strong>apl</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Array of average precision values for multiple predictions</p></li>
+<li><p><strong>labels</strong> (<em>List</em><em>[</em><em>string</em><em>]</em>) – Labels of the multiple models plotted</p></li>
+<li><p><strong>filename</strong> (<em>string</em>) – Name of the PDF file</p></li>
+<li><p><strong>path</strong> (<em>string</em>) – Path where the plot will be stored.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt class="sig sig-object py" id="nodeclass.tools.plots.plot_roc">
 <span class="sig-prename descclassname"><span class="pre">nodeclass.tools.plots.</span></span><span class="sig-name descname"><span class="pre">plot_roc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fpr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tpr</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auc</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.plots.plot_roc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a ROC curve and save it in a PDF file</p>
@@ -1012,6 +1030,24 @@ classes considered in ‘cls’</p>
 <li><p><strong>fpr</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Array of false positive rate values</p></li>
 <li><p><strong>tpr</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Array of true positive rate values</p></li>
 <li><p><strong>auc</strong> (<em>float</em>) – Area under roc curve</p></li>
+<li><p><strong>filename</strong> (<em>string</em>) – Name of the PDF file</p></li>
+<li><p><strong>path</strong> (<em>string</em>) – Path where the plot will be stored.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="nodeclass.tools.plots.plot_rocs">
+<span class="sig-prename descclassname"><span class="pre">nodeclass.tools.plots.</span></span><span class="sig-name descname"><span class="pre">plot_rocs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fprl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tprl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aucl</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#nodeclass.tools.plots.plot_rocs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Plot multiple roc curves in the same figure and save it in a PDF file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fprl</strong> (<em>np.arry</em><em>[</em><em>np.array</em><em>[</em><em>float</em><em>]</em><em>]</em>) – Array of arrays of false positive rate values for multiple predictions</p></li>
+<li><p><strong>tprl</strong> (<em>np.arry</em><em>[</em><em>np.array</em><em>[</em><em>float</em><em>]</em><em>]</em>) – Array of arrays of true positive rate values for multiple predictions</p></li>
+<li><p><strong>aucl</strong> (<em>np.array</em><em>[</em><em>float</em><em>]</em>) – Array of area under roc curve values for multiple predictions</p></li>
+<li><p><strong>labels</strong> (<em>List</em><em>[</em><em>string</em><em>]</em>) – Labels of the multiple models plotted</p></li>
 <li><p><strong>filename</strong> (<em>string</em>) – Name of the PDF file</p></li>
 <li><p><strong>path</strong> (<em>string</em>) – Path where the plot will be stored.</p></li>
 </ul>

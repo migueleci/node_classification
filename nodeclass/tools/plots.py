@@ -104,81 +104,62 @@ def plot_conf_matrix(cm, filename, path, labels=[0,1]):
   plt.close()
 
 
-# # plot multiple auc roc curves in one figure
-# def plot_mroc(term, folder, fprs, tprs, aucs, lbs):
-#   fig, ax = plt.subplots(figsize=(6.5,6.5))
-#   for fpr, tpr, auc, lb in zip(fprs, tprs, aucs, lbs):
-#     plt.plot(fpr, tpr, lw=2, label='{0} AUC = {1:.2f}'.format(lb, auc))
-#   plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-#   plt.xlim([0.0, 1.0])
-#   plt.ylim([0.0, 1.0])
-#   plt.xlabel('1 - Specificity')
-#   plt.ylabel('Sensitivity')
-#   plt.legend(loc='lower right')
-#   plt.savefig('{0}/{1}_auc.pdf'.format(folder, term), format='pdf', dpi=600)
-#   plt.close()
-#
-#
-# # plot multiple average precision curves in one figure
-# def plot_map(term, folder, recalls, precisions, aps, lbs):
-#   fig, ax = plt.subplots(figsize=(6.5,6.5))
-#   for recall, precision, ap, lb in zip(recalls, precisions, aps, lbs):
-#     plt.plot(recall, precision, lw=2, label='{0} AP = {1:.2f}'.format(lb, ap))
-#   plt.xlim([0.0, 1.0])
-#   plt.ylim([0.0, 1.0])
-#   plt.xlabel('Recall')
-#   plt.ylabel('Precision')
-#   plt.legend(loc='lower right')
-#   plt.savefig('{0}/{1}_ap.pdf'.format(folder, term), format='pdf', dpi=600)
-#   plt.close()
-#
-# # plot line with std dev
-# def plot_mts_hist(x,y,e,folder,name):
-#   fig, ax = plt.subplots(figsize=(6.5,6.5))
-#   plt.plot(x, y, '--')
-#   lowerb = [yi-ei for yi,ei in zip(y,e)]
-#   upperb = [yi+ei for yi,ei in zip(y,e)]
-#   plt.fill_between(x, lowerb, upperb, alpha=.3)
-#   plt.ylabel(name)
-#   plt.xticks(rotation=90)
-#   plt.tight_layout()
-#   plt.savefig('{0}/{1}_hist.pdf'.format(folder,name), format='pdf', dpi=600)
-#   plt.close()
-#
-# # plot pie
-# def plot_feat_imp(l,x,folder,name):
-#   fig, ax = plt.subplots(figsize=(8,5))
-#   plt.pie(x, autopct='%1.1f%%', textprops=dict(size=14, color='w', weight='bold'))
-#   plt.legend(l, loc='best')
-#   plt.axis('equal')
-#   plt.tight_layout()
-#   plt.savefig('{0}/{1}_fimp.pdf'.format(folder,name), format='pdf', dpi=600)
-#   plt.close()
-#
-#
-# # plot auc roc vs height in hierarchy
-# def plot_auc_height(data,folder,name):
-#   x, y = [x for x,y in data], [y for x,y in data]
-#   fig, ax = plt.subplots(figsize=(5,5))
-#   plt.plot(x,y,'.')
-#   plt.xlabel('Height')
-#   plt.ylabel('AUC ROC')
-#   plt.tight_layout()
-#   plt.savefig('{0}/{1}_auc_height.pdf'.format(folder,name), format='pdf', dpi=600)
-#   plt.close()
-#
-# # plot multiple line plots
-# def line_plot(data,model_name,xlabel,ylabel,xticks,ylim,path):
-#   fig, ax = plt.subplots(figsize=(8,8))
-#   x = np.arange(len(xticks))
-#   for idx, (_data, _model_name) in enumerate(zip(data,model_name)):
-#     plt.plot(x, _data, 'b-', color=COLORS[idx], label=_model_name)
-#   plt.ylim(ylim)
-#   plt.xlabel(xlabel)
-#   plt.ylabel(ylabel)
-#   plt.xticks(x, xticks, rotation=90)
-#   plt.legend(loc='best')
-#   plt.tight_layout()
-#   fname = re.sub(r'\W+', '', ylabel).lower()
-#   plt.savefig('{0}/{1}.pdf'.format(path, fname), format='pdf', dpi=600)
-#   plt.close()
+def plot_rocs(fprl, tprl, aucl, labels, filename, path):
+  """
+  Plot multiple roc curves in the same figure and save it in a PDF file
+
+  :param fprl: Array of arrays of false positive rate values for multiple predictions
+  :type fprl: np.arry[np.array[float]]
+  :param tprl: Array of arrays of true positive rate values for multiple predictions
+  :type tprl: np.arry[np.array[float]]
+  :param aucl: Array of area under roc curve values for multiple predictions
+  :type aucl: np.array[float]
+  :param labels: Labels of the multiple models plotted
+  :type labels: List[string]
+  :param filename: Name of the PDF file
+  :type filename: string
+  :param path: Path where the plot will be stored.
+  :type path: string
+  """
+  fig, ax = plt.subplots(figsize=(6.5,6.5))
+  for fpr, tpr, auc, l in zip(fprl, tprl, aucl, labels):
+    plt.plot(fpr, tpr, lw=2, label='{0} = {1:.2f}'.format(l, auc))
+  plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+  plt.xlim([0.0, 1.0])
+  plt.ylim([0.0, 1.0])
+  plt.xlabel('1 - Specificity')
+  plt.ylabel('Sensitivity')
+  plt.legend(loc='lower right')
+  figname = '{0}/{1}_roc'.format(path, filename)
+  plt.savefig(figname, format='pdf', dpi=600)
+  plt.close()
+
+
+def plot_prs(recl, prcl, apl, labels, filename, path):
+  """
+  Plot multiple precision-recall curves in the same figure and save it in a PDF file
+
+  :param recl: Array of arrays of recall values for multiple predictions
+  :type recl: np.arry[np.array[float]]
+  :param prcl: Array of arrays of precision values for multiple predictions
+  :type prcl: np.arry[np.array[float]]
+  :param apl: Array of average precision values for multiple predictions
+  :type apl: np.array[float]
+  :param labels: Labels of the multiple models plotted
+  :type labels: List[string]
+  :param filename: Name of the PDF file
+  :type filename: string
+  :param path: Path where the plot will be stored.
+  :type path: string
+  """
+  fig, ax = plt.subplots(figsize=(6.5,6.5))
+  for rec, prc, ap, l in zip(recl, prcl, apl, labels):
+    plt.plot(rec, prc, lw=2, label='{0} AP = {1:.2f}'.format(l, ap))
+  plt.xlim([0.0, 1.0])
+  plt.ylim([0.0, 1.0])
+  plt.xlabel('Recall')
+  plt.ylabel('Precision')
+  plt.legend(loc='lower right')
+  figname = '{0}/{1}_ap'.format(path, filename)
+  plt.savefig(figname, format='pdf', dpi=600)
+  plt.close()

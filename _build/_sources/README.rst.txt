@@ -63,7 +63,7 @@ The complete source code of the example can be found in the
 `GitHub repository <https://github.com/migueleci/node_classification>`_. First, the
 *xgbfnc* package need to be imported::
 
-  from nodeclass.models import xgbfn
+  from nodeclass.models.xgbfnc import XGBfnc
   from nodeclass.tools import data
 
 After creating adjacency matrix ``adj`` for the network, the structural
@@ -108,7 +108,7 @@ The complete source code of the example can be found in the
 `GitHub repository <https://github.com/migueleci/node_classification>`_. First, the
 *xgbhc* package need to be imported::
 
-  from nodeclass.models import xgbhc
+  from nodeclass.models.xgbhc import XGBhc
   from nodeclass.tools import data
 
 The adjacency matrix for the GCN and the gene functions (from ancestral
