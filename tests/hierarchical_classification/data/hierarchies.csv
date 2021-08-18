@@ -1,0 +1,20 @@
+Root_idx,Root,Classes,Nodes,Desc
+1183,GO:0009987,925,5900,cellular process
+762,GO:0008152,775,5862,metabolic process
+3223,GO:0065007,485,2224,biological regulation
+2941,GO:0050896,261,3319,response to stimulus
+2987,GO:0051179,164,1350,localization
+2030,GO:0032502,149,1063,developmental process
+1552,GO:0016043,140,661,cellular component organization
+594,GO:0006796,118,1270,phosphate-containing compound metabolic process
+2029,GO:0032501,118,1043,multicellular organismal process
+0,GO:0000003,72,648,reproduction
+2485,GO:0044085,50,377,cellular component biogenesis
+2520,GO:0044419,37,777,interspecies interaction between organisms
+3092,GO:0051704,22,144,multi-organism process
+162,GO:0002376,11,131,immune system process
+2240,GO:0040007,10,108,growth
+2536,GO:0044848,7,8,biological phase
+2843,GO:0048511,2,62,rhythmic process
+1814,GO:0022610,2,9,biological adhesion
+2423,GO:0043473,2,8,pigmentation
