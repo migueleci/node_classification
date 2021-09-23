@@ -109,9 +109,8 @@ properties are computed using the module <cite>data</cite> of the package:</p>
 </div>
 <p>This method returns a DataFrame with the structural properties of the network
 and a list of the names of these properties (i.e., column names). After adding
-the additional features of the network to the DataFrame, the XGBhc module is
-used to instantiate the XGBhc class:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">XGBhc</span><span class="p">()</span>
+the additional features of the network to the DataFrame:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">test</span> <span class="o">=</span> <span class="n">XGBfnc</span><span class="p">()</span>
 <span class="n">test</span><span class="o">.</span><span class="n">load_data</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">strc_cols</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">term</span><span class="p">,</span> <span class="n">output_path</span><span class="o">=</span><span class="s1">&#39;output&#39;</span><span class="p">)</span>
 <span class="n">ans</span><span class="p">,</span> <span class="n">pred</span><span class="p">,</span> <span class="n">params</span> <span class="o">=</span> <span class="n">test</span><span class="o">.</span><span class="n">structural_test</span><span class="p">()</span>
 </pre></div>

@@ -73,10 +73,9 @@ properties are computed using the module `data` of the package::
 
 This method returns a DataFrame with the structural properties of the network
 and a list of the names of these properties (i.e., column names). After adding
-the additional features of the network to the DataFrame, the XGBhc module is
-used to instantiate the XGBhc class::
+the additional features of the network to the DataFrame::
 
-  test = XGBhc()
+  test = XGBfnc()
   test.load_data(df, strc_cols, y, term, output_path='output')
   ans, pred, params = test.structural_test()
 
